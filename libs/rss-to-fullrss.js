@@ -32,9 +32,9 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 
   feedParser.on('readable', function() {
     // This is where the action is!
-    var stream = this
-      , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-      , item;
+    var stream = this;
+    var meta = this.meta;
+    var item;
 
     // We potentially can process many items at one.
     stream.setMaxListeners(100);
