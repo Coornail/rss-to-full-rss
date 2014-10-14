@@ -31,7 +31,7 @@ RssToFullRss.prototype.useCache = function(cache) {
  *   Callback.
  */
 RssToFullRss.prototype.fetchFullDescription = function(item, cb) {
-  readability(item.link, function(err, article, meta) {
+  readability(item.link, {gzip: true}, function(err, article, meta) {
     if (err) {
       cb(err);
       return;
@@ -144,7 +144,7 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 RssToFullRss.prototype.processRss = function(url, callback) {
   var self = this;
 
-  var req = request(url);
+  var req = request({url: url, gzip: true});
   req.on('error', function (error) {
     callback(error);
   });
