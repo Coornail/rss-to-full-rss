@@ -1,5 +1,5 @@
-var http = require('http');
-var url = require('url');
+'use strict';
+
 var request = require('request');
 var FeedParser = require('feedparser');
 var RSS = require('rss');
@@ -90,19 +90,18 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
     // This is where the action is!
     var stream = this;
     var meta = this.meta;
-    var item;
 
     // We potentially can process many items at one.
     stream.setMaxListeners(100);
 
-    var rss_settings = {
+    var rssSettings = {
       generator: 'Rss to Full Rss',
       site_url: meta.link
     };
 
-    rss_settings = _.merge(meta, rss_settings);
+    rssSettings = _.merge(meta, rssSettings);
 
-    var responseFeed = new RSS(rss_settings);
+    var responseFeed = new RSS(rssSettings);
 
     var items = [];
     stream.pipe(through(function write(item) {
@@ -140,7 +139,7 @@ RssToFullRss.prototype.processRss = function(url, callback) {
 
   req.on('response', function (res) {
     var stream = this;
-    if (res.statusCode != 200) {
+    if (res.statusCode !== 200) {
       return this.emit('error', new Error('Bad status code'));
     }
     stream.pipe(self.getFeedProcessor(callback));
