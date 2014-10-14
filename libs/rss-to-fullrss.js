@@ -6,6 +6,7 @@ var RSS = require('rss');
 var through = require('through');
 var async = require('async');
 var readability = require('node-readability');
+var _ = require('lodash');
 
 function RssToFullRss() {
 }
@@ -39,7 +40,14 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
     // We potentially can process many items at one.
     stream.setMaxListeners(100);
 
-    var responseFeed = new RSS(meta);
+    var rss_settings = {
+      generator: 'Rss to Full Rss',
+      site_url: meta.link
+    };
+
+    rss_settings = _.merge(meta, rss_settings);
+
+    var responseFeed = new RSS(rss_settings);
 
     var items = [];
     stream.pipe(through(function write(item) {
