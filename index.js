@@ -4,6 +4,9 @@ var RssToFullRss = require('./libs/rss-to-fullrss');
 
 var rssHandler = new RssToFullRss();
 
+/**
+ * Request processor callback.
+ */
 var processRequest = function(req, res) {
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;

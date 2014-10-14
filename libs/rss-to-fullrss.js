@@ -8,9 +8,23 @@ var async = require('async');
 var readability = require('node-readability');
 var _ = require('lodash');
 
+/**
+ * Class for the RssToFullRss converter.
+ *
+ * @constructor
+ */
 function RssToFullRss() {
 }
 
+/**
+ * Callback to get the full description for an rss item.
+ *
+ * @param item
+ *   Rss item from FeedParser.
+ *
+ * @param cb
+ *   Callback.
+ */
 RssToFullRss.prototype.getFullDescription = function(item, cb) {
   readability(item.link, function(err, article, meta) {
     if (err) {
@@ -23,6 +37,14 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
   });
 };
 
+/**
+ * Gets the feedProcessor object.
+ *
+ * @param callback
+ *   Callback on finishing the stream.
+ *
+ * @returns {FeedParser}
+ */
 RssToFullRss.prototype.getFeedProcessor = function(callback) {
   var self = this;
 
@@ -66,6 +88,15 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
   return feedParser;
 };
 
+/**
+ * Processes an rss feed.
+ *
+ * @param url
+ *   Rss feed url.
+ *
+ * @param callback
+ *   Callback after finishing the processing.
+ */
 RssToFullRss.prototype.processRss = function(url, callback) {
   var self = this;
 
