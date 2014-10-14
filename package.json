@@ -7,10 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
-    "name" : "Kornel Lugosi",
-    "email" : "coornail@gmail.com",
-    "url" : "http://coornail.net"
-  }
+    "name": "Kornel Lugosi",
+    "email": "coornail@gmail.com",
+    "url": "http://coornail.net"
+  },
   "license": "ISC",
   "dependencies": {
     "feedparser": "^0.19.2",
