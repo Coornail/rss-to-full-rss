@@ -14,7 +14,12 @@ var _ = require('lodash');
  * @constructor
  */
 function RssToFullRss() {
+  this.cache = null;
 }
+
+RssToFullRss.prototype.useCache = function(cache) {
+  this.cache = cache;
+};
 
 /**
  * Callback to get the full description for an rss item.
@@ -25,7 +30,7 @@ function RssToFullRss() {
  * @param cb
  *   Callback.
  */
-RssToFullRss.prototype.getFullDescription = function(item, cb) {
+RssToFullRss.prototype.fetchFullDescription = function(item, cb) {
   readability(item.link, function(err, article, meta) {
     if (err) {
       cb(err);
@@ -36,6 +41,34 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
     cb(null, item);
   });
 };
+
+/**
+ * Callback to get the full description for an rss item via the cache.
+ *
+ * @see RssToFullRss.fetchFullDescription();
+ */
+RssToFullRss.prototype.getFullDescription = function(item, cb) {
+  var that = this;
+  var k = item.link;
+
+  if (this.cache === null || this.cache === undefined) {
+    this.fetchFullDescription(item, cb);
+    return;
+  }
+
+  this.cache.get(k, function(err, data) {
+    if (err || data === undefined) {
+      that.fetchFullDescription(item, function(err, data) {
+        that.cache.set(k, data, 100000, function() {});
+        cb(null, data);
+      });
+      return;
+    }
+
+    cb(null, data);
+  });
+};
+
 
 /**
  * Gets the feedProcessor object.
@@ -76,7 +109,7 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
         items.push(item);
       },
       function end() {
-        async.map(items, self.getFullDescription, function (error, items) {
+        async.map(items, function(item, cb) {self.getFullDescription(item, cb);}, function (error, items) {
           items.forEach(function (item) {
             responseFeed.item(item);
           });
