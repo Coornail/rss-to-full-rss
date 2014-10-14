@@ -30,9 +30,10 @@ var processRequest = function(req, res) {
 
   logger.info('Request Full RSS for %s', query.url);
 
+  var requestStart = new Date();
   rssHandler.processRss(query.url, function(err, data) {
-    res.write(data);
-    res.end();
+    res.end(data);
+    logger.info('Served Full RSS for %s in %s ms', query.url, (new Date() - requestStart));
   });
 };
 
