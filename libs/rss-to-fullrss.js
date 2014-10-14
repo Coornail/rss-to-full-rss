@@ -3,7 +3,6 @@
 var request = require('request');
 var FeedParser = require('feedparser');
 var RSS = require('rss');
-var through = require('through');
 var async = require('async');
 var readability = require('node-readability');
 var _ = require('lodash');
@@ -15,6 +14,7 @@ var _ = require('lodash');
  */
 function RssToFullRss() {
   this.cache = null;
+  this.logger = null;
 }
 
 RssToFullRss.prototype.useCache = function(cache) {
@@ -51,6 +51,8 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
   var that = this;
   var k = item.link;
 
+  this.logger.verbose('Getting full content for %s', k);
+
   if (this.cache === null || this.cache === undefined) {
     this.fetchFullDescription(item, cb);
     return;
@@ -58,13 +60,24 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
 
   this.cache.get(k, function(err, data) {
     if (err || data === undefined) {
+      that.logger.debug('[cache] Miss for %s', k);
+
+      var fetchStart = new Date();
       that.fetchFullDescription(item, function(err, data) {
-        that.cache.set(k, data, 100000, function() {});
-        cb(null, data);
+        if (err) {
+          that.logger.warn('[article-fetch] Error fetching full content for %s: %s', k, err);
+          cb(err);
+        } else {
+          that.logger.info('[article-fetch] Fetched and processed article %s in %s ms', k, (new Date() - fetchStart));
+          that.cache.set(k, data, 100000, function() {});
+          cb(null, data);
+        }
       });
+
       return;
     }
 
+    that.logger.debug('[cache] Hit for %s', k);
     cb(null, data);
   });
 };
@@ -79,6 +92,7 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
  * @returns {FeedParser}
  */
 RssToFullRss.prototype.getFeedProcessor = function(callback) {
+  var items = [];
   var self = this;
 
   var feedParser = new FeedParser();
@@ -87,12 +101,16 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
   });
 
   feedParser.on('readable', function() {
-    // This is where the action is!
     var stream = this;
-    var meta = this.meta;
+    var item;
 
-    // We potentially can process many items at one.
-    stream.setMaxListeners(100);
+    while (item = stream.read()) {
+      items.push(item);
+    }
+  });
+
+  feedParser.on('end', function() {
+    var meta = this.meta;
 
     var rssSettings = {
       generator: 'Rss to Full Rss',
@@ -103,18 +121,12 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 
     var responseFeed = new RSS(rssSettings);
 
-    var items = [];
-    stream.pipe(through(function write(item) {
-        items.push(item);
-      },
-      function end() {
-        async.map(items, function(item, cb) {self.getFullDescription(item, cb);}, function (error, items) {
-          items.forEach(function (item) {
-            responseFeed.item(item);
-          });
-          callback(null, responseFeed.xml());
-        });
-      }));
+    async.map(items, function(item, cb) {self.getFullDescription(item, cb);}, function (error, items) {
+      items.forEach(function (item) {
+        responseFeed.item(item);
+      });
+      callback(null, responseFeed.xml());
+    });
   });
 
   return feedParser;
@@ -142,9 +154,10 @@ RssToFullRss.prototype.processRss = function(url, callback) {
     if (res.statusCode !== 200) {
       return this.emit('error', new Error('Bad status code'));
     }
-    stream.pipe(self.getFeedProcessor(callback));
-  });
 
+    var processor = self.getFeedProcessor(callback);
+    stream.pipe(processor);
+  });
 };
 
 module.exports = RssToFullRss;

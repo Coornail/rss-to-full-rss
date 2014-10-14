@@ -15,11 +15,12 @@
   "dependencies": {
     "feedparser": "^0.19.2",
     "lodash": "^2.4.1",
+    "memcached": "^2.0.0",
     "node-readability": "^0.9.0",
     "node-rss": "^1.0.1",
     "request": "^2.45.0",
     "rss": "^1.0.0",
-    "through": "^2.3.6"
+    "winston": "^0.8.1"
   },
   "devDependencies": {
     "gulp": "^3.8.8",
