@@ -65,7 +65,7 @@ var processRequest = function(req, res) {
   var urlParts = url.parse(req.url, true);
   var query = urlParts.query;
 
-  if (query.url === undefined) {
+  if (query.url === undefined || query.url === '') {
     res.end('Provide a ?url=... parameter to get the full-text for the rss.');
     logger.warn('Invalid request', {url: req.url});
     return;
@@ -75,6 +75,13 @@ var processRequest = function(req, res) {
 
   var requestStart = new Date();
   rssHandler.processRss(query.url, function(err, data) {
+    if (err) {
+      logger.error('Error requesting url', query.url, err);
+      res.statusCode = 400;
+      res.end('Invalid request.');
+      return;
+    }
+
     res.end(data);
     logger.info('Served Full RSS for %s in %s ms', query.url, (new Date() - requestStart));
   });

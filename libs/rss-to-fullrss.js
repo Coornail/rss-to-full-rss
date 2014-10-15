@@ -151,7 +151,13 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 RssToFullRss.prototype.processRss = function(url, callback) {
   var self = this;
 
-  var req = request({url: url, gzip: true});
+  try {
+    var req = request({url: url, gzip: true});
+  } catch(exception) {
+    callback(exception);
+    return;
+  }
+
   req.on('error', function (error) {
     callback(error);
   });
