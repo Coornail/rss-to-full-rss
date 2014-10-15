@@ -60,4 +60,9 @@ var processRequest = function(req, res) {
   });
 };
 
-http.createServer(processRequest).listen(8000);
+/**
+ * Create server.
+ */
+var port = nconf.get('port');
+http.createServer(processRequest).listen(port);
+logger.info('Listening on port %d', port);
