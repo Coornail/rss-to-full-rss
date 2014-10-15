@@ -5,6 +5,7 @@ var url = require('url');
 var RssToFullRss = require('./libs/rss-to-fullrss');
 var winston = require('winston');
 var nconf = require('nconf');
+var _ = require('lodash');
 
 var logger = new (winston.Logger)({
   transports: [new (winston.transports.Console)({colorize: true})]
@@ -49,7 +50,10 @@ if (nconf.get('cacheProvider') === 'memcache' || nconf.get('cacheProvider') === 
 
   var Memcached = require('memcached');
 
-  var memcachedConfig = nconf.get('memcached:host') + ':' + nconf.get('memcached.port');
+  var memcachedConfig = _.map(nconf.get('memcached'), function(item) {
+    return item.host + ':' + item.port;
+  });
+
   var memcached = new Memcached(memcachedConfig);
   rssHandler.useCache(memcached);
 }
