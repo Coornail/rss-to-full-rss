@@ -10,30 +10,46 @@ var logger = new (winston.Logger)({
   transports: [new (winston.transports.Console)({colorize: true})]
 });
 
-nconf.argv()
-  .env()
-  .file({ file: 'config.json' })
-  .defaults({
-    'cacheProvider': null,
-    'memcachedSettings': [
+// Command line arguments.
+var defaultConfig = {
+    cacheProvider: 'none',
+    memcached: [
       {
         host: '127.0.0.1',
         port: 11211
       }
     ],
-    'port': 8000
-  });
+    port: 8000,
+    help: false
+  };
+
+nconf.argv()
+  .file({ file: 'config.json' })
+  .defaults(defaultConfig);
+
+if (nconf.get('help') !== false) {
+  console.log('Rss to Full Rss converter.');
+  console.log('');
+  console.log('--port [port]                        default: ' + defaultConfig.port);
+  console.log('--cacheProvider [none|memcached]     default: ' + defaultConfig.cacheProvider);
+  console.log('--memcached:host [host]              default: ' + defaultConfig.memcached[0].host);
+  console.log('--memcached:port [port]              default: ' + defaultConfig.memcached[0].port);
+  console.log('');
+  console.log('You can use the config.json to set up the config as well.');
+  console.log('See config.json.example');
+  process.exit(0);
+}
 
 var rssHandler = new RssToFullRss();
 rssHandler.logger = logger;
 
 // Add caching if configured.
-if (nconf.get('cache') === 'memcache' || nconf.get('cache') === 'memcached') {
-  logger.info('[cache] Adding Memcached cache provider', nconf.get('memcachedSettings'));
+if (nconf.get('cacheProvider') === 'memcache' || nconf.get('cacheProvider') === 'memcached') {
+  logger.info('[cache] Adding Memcached cache provider', nconf.get('memcached'));
 
   var Memcached = require('memcached');
 
-  var memcachedConfig = nconf.get('memcachedSettings:host') + ':' + nconf.get('memcachedSettings.port');
+  var memcachedConfig = nconf.get('memcached:host') + ':' + nconf.get('memcached.port');
   var memcached = new Memcached(memcachedConfig);
   rssHandler.useCache(memcached);
 }
