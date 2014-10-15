@@ -11,6 +11,9 @@
     "email": "coornail@gmail.com",
     "url": "http://coornail.net"
   },
+  "bin": {
+    "rss-to-full-rss": "./index.js"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
