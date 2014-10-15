@@ -17,6 +17,13 @@ function RssToFullRss() {
   this.logger = null;
 }
 
+/**
+ * Use a cache provider to not fetch all the articles again.
+ *
+ * @param cache
+ *   Cache object.
+ *   Should be compatible with Memcached.get() and Memcached.set().
+ */
 RssToFullRss.prototype.useCache = function(cache) {
   this.cache = cache;
 };
