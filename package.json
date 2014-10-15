@@ -1,7 +1,7 @@
 {
   "name": "rss_fulltext",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rss to Full Rss proxy.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
     "email": "coornail@gmail.com",
     "url": "http://coornail.net"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "feedparser": "^0.19.2",
     "lodash": "^2.4.1",
