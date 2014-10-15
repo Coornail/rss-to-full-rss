@@ -80,5 +80,8 @@ var processRequest = function(req, res) {
  * Create server.
  */
 var port = nconf.get('port');
-http.createServer(processRequest).listen(port);
+var server = http.createServer(processRequest).listen(port);
+server.on('error', function(error) {
+  logger.error('Error on creating http server ::', error);
+});
 logger.info('Listening on port %d', port);
