@@ -23,6 +23,7 @@ var defaultConfig = {
       }
     ],
     port: 8000,
+    backend: 'cli',
     help: false
   };
 
@@ -37,6 +38,7 @@ if (nconf.get('help') !== false) {
   console.log('--cacheProvider [none|memcached]     default: ' + defaultConfig.cacheProvider);
   console.log('--memcached:host [host]              default: ' + defaultConfig.memcached[0].host);
   console.log('--memcached:port [port]              default: ' + defaultConfig.memcached[0].port);
+  console.log('--backend [cli|inApp]                default: ' + defaultConfig.backend);
   console.log('');
   console.log('You can use the config.json to set up the config as well.');
   console.log('See config.json.example');
@@ -60,6 +62,14 @@ if (nconf.get('cacheProvider') === 'memcache' || nconf.get('cacheProvider') === 
   rssHandler.useCache(memcached);
 }
 
+// Set up Readability backend.
+var Backend = (nconf.get('backend') === 'cli') ?
+  require('./libs/readability-backend/cli.js') :
+  require('./libs/readability-backend/in-app.js');
+
+rssHandler.setReadabilityBackend(new Backend());
+logger.info('Using %s backend', nconf.get('backend'));
+
 /**
  * Request processor callback.
  */
@@ -76,6 +86,7 @@ var processRequest = function(req, res) {
   logger.info('Request Full RSS for %s', query.url);
 
   var requestStart = new Date();
+
   rssHandler.processRss(query.url, function(err, data) {
     if (err) {
       logger.error('Error requesting url', query.url, err);

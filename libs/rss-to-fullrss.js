@@ -4,7 +4,6 @@ var request = require('request');
 var FeedParser = require('feedparser');
 var RSS = require('rss');
 var async = require('async');
-var readability = require('node-readability');
 var _ = require('lodash');
 
 /**
@@ -14,8 +13,13 @@ var _ = require('lodash');
  */
 function RssToFullRss() {
   this.cache = null;
+  this.readabilityBackend = null;
   this.logger = null;
 }
+
+RssToFullRss.prototype.setReadabilityBackend = function(backend) {
+  this.readabilityBackend = backend;
+};
 
 /**
  * Use a cache provider to not fetch all the articles again.
@@ -26,27 +30,6 @@ function RssToFullRss() {
  */
 RssToFullRss.prototype.useCache = function(cache) {
   this.cache = cache;
-};
-
-/**
- * Callback to get the full description for an rss item.
- *
- * @param item
- *   Rss item from FeedParser.
- *
- * @param cb
- *   Callback.
- */
-RssToFullRss.prototype.fetchFullDescription = function(item, cb) {
-  readability(item.link, {gzip: true}, function(err, article, meta) {
-    if (err) {
-      cb(err);
-      return;
-    }
-
-    item.description = article.content;
-    cb(null, item);
-  });
 };
 
 /**
@@ -61,7 +44,7 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
   this.logger.verbose('Getting full content for %s', k);
 
   if (this.cache === null || this.cache === undefined) {
-    this.fetchFullDescription(item, cb);
+    this.readabilityBackend.fetch(item, cb);
     return;
   }
 
@@ -70,7 +53,7 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
       that.logger.debug('[cache] Miss for %s', k);
 
       var fetchStart = new Date();
-      that.fetchFullDescription(item, function(err, data) {
+      that.readabilityBackend.fetch(item, function(err, data) {
         if (err) {
           that.logger.warn('[article-fetch] Error fetching full content for %s: %s', k, err);
           cb(err);
