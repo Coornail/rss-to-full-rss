@@ -4,8 +4,8 @@ var gulp = require('gulp'),
     jshint = require('gulp-jshint');
 
 var files = {
-  js: ['./index.js', './libs/*.js', './tests/*.js'],
-  tests: ['./tests/*.js'],
+  js: ['./index.js', './libs/*.js', './libs/readability-backend/*.js', './tests/*.js'],
+  tests: ['./tests/*.js']
 };
 
 /*
