@@ -40,8 +40,9 @@ RssToFullRss.prototype.useCache = function(cache) {
 RssToFullRss.prototype.getFullDescription = function(item, cb) {
   var that = this;
   var k = item.link;
+  var fetchStart = new Date();
 
-  this.logger.verbose('Getting full content for %s', k);
+  this.logger.verbose('[article-fetch] Getting full content for %s', k);
 
   if (this.cache === null || this.cache === undefined) {
     this.readabilityBackend.fetch(item, cb);
@@ -52,7 +53,6 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
     if (err || data === undefined) {
       that.logger.debug('[cache] Miss for %s', k);
 
-      var fetchStart = new Date();
       that.readabilityBackend.fetch(item, function(err, data) {
         if (err) {
           that.logger.warn('[article-fetch] Error fetching full content for %s: %s', k, err);
@@ -67,11 +67,10 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
       return;
     }
 
-    that.logger.debug('[cache] Hit for %s', k);
+    that.logger.debug('[cache] Hit for %s in %s ms', k, (new Date() - fetchStart));
     cb(null, data);
   });
 };
-
 
 /**
  * Gets the feedProcessor object.

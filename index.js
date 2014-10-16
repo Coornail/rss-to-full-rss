@@ -9,10 +9,6 @@ var winston = require('winston');
 var nconf = require('nconf');
 var _ = require('lodash');
 
-var logger = new (winston.Logger)({
-  transports: [new (winston.transports.Console)({colorize: true})]
-});
-
 // Command line arguments.
 var defaultConfig = {
     cacheProvider: 'none',
@@ -27,7 +23,8 @@ var defaultConfig = {
     'readability.com': {
       token: ''
     },
-    help: false
+    help: false,
+    verbose: false
   };
 
 nconf.argv()
@@ -43,11 +40,21 @@ if (nconf.get('help') !== false) {
   console.log('--memcached:port [port]                default: ' + defaultConfig.memcached[0].port);
   console.log('--backend [cli|inApp|readability.com]  default: ' + defaultConfig.backend);
   console.log('--readability.com:token [token]        default: ' + defaultConfig['readability.com'].token);
+  console.log('--verbose');
   console.log('');
   console.log('You can use the config.json to set up the config as well.');
   console.log('See config.json.example');
   process.exit(0);
 }
+
+// Set up logging.
+var loggingOptions = {
+  colorize: true,
+  level: (nconf.get('verbose')) ? 'debug' : 'info'
+};
+var logger = new (winston.Logger)({
+  transports: [new (winston.transports.Console)(loggingOptions)]
+});
 
 var rssHandler = new RssToFullRss();
 rssHandler.logger = logger;
