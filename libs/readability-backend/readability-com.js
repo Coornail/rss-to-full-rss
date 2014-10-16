@@ -7,6 +7,22 @@ function ReadabilityComBackend(token) {
   this.fallback = null;
 }
 
+
+/**
+ * Get the readable name of the backend.
+ *
+ * @returns {string}
+ */
+ReadabilityComBackend.prototype.getName = function() {
+  var result = 'Readability.com backend';
+
+  if (this.fallback) {
+    result += ' [fallback: ' + this.fallback.getName() + ']';
+  }
+
+  return result;
+};
+
 ReadabilityComBackend.prototype.setFallback = function(fallback) {
   this.fallback = fallback;
   // Let's not exhaust the fallback in case we have to rely on it.

@@ -16,6 +16,15 @@ function ReadabilityCliBackend() {
 }
 
 /**
+ * Get the readable name of the backend.
+ *
+ * @returns {string}
+ */
+ReadabilityCliBackend.prototype.getName = function() {
+  return 'Command-line backend (max subprocesses: '+ this.parallelLimit +')';
+};
+
+/**
  * Callback to get the full description for an rss item.
  *
  * @param item

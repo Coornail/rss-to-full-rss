@@ -8,6 +8,15 @@ function ReadabilityInAppBackend() {
 }
 
 /**
+ * Get the readable name of the backend.
+ *
+ * @returns {string}
+ */
+ReadabilityInAppBackend.prototype.getName = function() {
+  return 'In-app backend';
+};
+
+/**
  * Callback to get the full description for an rss item.
  *
  * @param item
