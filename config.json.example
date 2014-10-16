@@ -7,5 +7,7 @@
     }
   ],
   "port": 8000,
-  "help": false
+  "readability.com": {
+    "token": "[readability com token]"
+  }
 }
