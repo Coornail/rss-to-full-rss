@@ -2,6 +2,10 @@
   "name": "rss_fulltext",
   "version": "1.0.0",
   "description": "Rss to Full Rss proxy.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Coornail/rss-to-full-rss.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
