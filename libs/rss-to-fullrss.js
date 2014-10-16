@@ -111,12 +111,25 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 
     var responseFeed = new RSS(rssSettings);
 
-    async.map(items, function(item, cb) {self.getFullDescription(item, cb);}, function (error, items) {
+    var asyncIterator = function(item, cb) {
+      self.getFullDescription(item, cb);
+    };
+
+    var asyncCallback = function (error, items) {
       items.forEach(function (item) {
         responseFeed.item(item);
       });
       callback(null, responseFeed.xml());
-    });
+    };
+
+    // Ask the readability backend if we can parse the feed items parallel or
+    // maybe we should put a limit.
+    var parallelLimit = self.readabilityBackend.parallelLimit || 0;
+    if (parallelLimit > 0) {
+      async.mapLimit(items, parallelLimit, asyncIterator, asyncCallback);
+    } else {
+      async.map(items, asyncIterator, asyncCallback);
+    }
   });
 
   return feedParser;

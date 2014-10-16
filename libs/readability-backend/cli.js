@@ -9,6 +9,10 @@
 var spawn = require('child_process').spawn;
 
 function ReadabilityCliBackend() {
+  // Limit number of cli executors to 2x of the number of CPUs we have.
+  // This is to not waste cpu by waiting for the network, but not spawn too
+  // many processes either.
+  this.parallelLimit = require('os').cpus().length * 2;
 }
 
 /**
