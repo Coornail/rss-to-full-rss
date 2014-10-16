@@ -104,6 +104,7 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
 
     var rssSettings = {
       generator: 'Rss to Full Rss',
+      /* jshint camelcase:false */
       site_url: meta.link
     };
 
@@ -146,9 +147,10 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
  */
 RssToFullRss.prototype.processRss = function(url, callback) {
   var self = this;
+  var req;
 
   try {
-    var req = request({url: url, gzip: true});
+    req = request({url: url, gzip: true});
   } catch(exception) {
     callback(exception);
     return;
