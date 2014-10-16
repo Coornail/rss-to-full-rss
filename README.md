@@ -18,21 +18,27 @@ Try your favourite rss via http://127.0.0.1:8000/?url=[rss feed].
 
 Advanced usage
 --------------
-### Start daemon on a different port
-```sh
-node_modules/.bin/rss-to-full-rss --port [port_number]
-```
-
 ### Add memcache caching backend
 So you don't have to fetch the articles every time. (Assuming memcache is running on 127.0.0.1:11211)
 ```sh
 node_modules/.bin/rss-to-full-rss --cacheProvider memcache
 ```
 
+### Use readability.com as an api backend
+```sh
+node_modules/.bin/rss-to-full-rss --backend readability.com --readability.com:token [token]
+```
+Get your token from https://www.readability.com/settings/account
+
 ### Set up your config file
 ```sh
 cp config.json.example config.json
 vim config.json
+```
+
+### Start daemon on a different port
+```sh
+node_modules/.bin/rss-to-full-rss --port [port_number]
 ```
 
 License
