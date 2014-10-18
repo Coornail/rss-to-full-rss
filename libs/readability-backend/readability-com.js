@@ -7,7 +7,6 @@ function ReadabilityComBackend(token) {
   this.fallback = null;
 }
 
-
 /**
  * Get the readable name of the backend.
  *

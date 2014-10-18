@@ -5,6 +5,7 @@ var FeedParser = require('feedparser');
 var RSS = require('rss');
 var async = require('async');
 var _ = require('lodash');
+var validator = require('validator');
 
 /**
  * Class for the RssToFullRss converter.
@@ -35,12 +36,17 @@ RssToFullRss.prototype.useCache = function(cache) {
 /**
  * Callback to get the full description for an rss item via the cache.
  *
- * @see RssToFullRss.fetchFullDescription();
+ * @see ReadabilityCliBackend.fetch()
  */
 RssToFullRss.prototype.getFullDescription = function(item, cb) {
   var that = this;
   var k = item.link;
   var fetchStart = new Date();
+
+  if (!this.isValidUrl(item.link)) {
+    cb('Invalid url: ' + item.link);
+    return;
+  }
 
   this.logger.verbose('[article-fetch] Getting full content for %s', k);
 
@@ -70,6 +76,21 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
     that.logger.debug('[cache] Hit for %s in %s ms', k, (new Date() - fetchStart));
     cb(null, data);
   });
+};
+
+/**
+ * Helper function to validate a url.
+ *
+ * @param url
+ * @returns {bool}
+ */
+RssToFullRss.prototype.isValidUrl = function(url) {
+  var validatorOptions = {
+    require_protocol: true,
+    protocols: ['http', 'https']
+  };
+
+  return validator.isURL(url , validatorOptions);
 };
 
 /**
