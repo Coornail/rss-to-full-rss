@@ -43,7 +43,7 @@ ReadabilityComBackend.prototype.fetch = function(item, cb) {
     if (that.fallback) {
       that.fallback.fetch(item, cb);
     } else {
-      cb(body);
+      cb('[backend] Http error: ' + error + '(' + response.statusCode + ') ' + url);
     }
   };
 
