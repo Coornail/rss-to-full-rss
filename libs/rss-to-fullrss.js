@@ -137,6 +137,10 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
     };
 
     var asyncCallback = function (error, items) {
+      if (error) {
+        this.logger.error(error);
+      }
+
       items.forEach(function (item) {
         responseFeed.item(item);
       });
