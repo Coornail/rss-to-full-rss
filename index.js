@@ -8,6 +8,7 @@ var RssToFullRss = require('./libs/rss-to-fullrss');
 var winston = require('winston');
 var nconf = require('nconf');
 var _ = require('lodash');
+var readabilityBackend = require('./libs/readability-backend/factory.js');
 
 // Command line arguments.
 var defaultConfig = {
@@ -73,35 +74,7 @@ if (nconf.get('cacheProvider') === 'memcache' || nconf.get('cacheProvider') === 
   rssHandler.useCache(memcached);
 }
 
-// Set up backend.
-var BackendProvider;
-var backendInstance;
-switch (nconf.get('backend')) {
-  case 'cli':
-    BackendProvider = require('./libs/readability-backend/cli.js');
-    backendInstance = new BackendProvider();
-    break;
-
-  case 'inApp':
-    BackendProvider = require('./libs/readability-backend/in-app.js');
-    backendInstance = new BackendProvider();
-    break;
-
-  case 'readability.com':
-    // Set up readability.com with token.
-    BackendProvider = require('./libs/readability-backend/readability-com.js');
-    backendInstance = new BackendProvider(nconf.get('readability.com:token'));
-
-    // Command line backend if readability.com is unavailable or if we
-    // exhausted their api limit.
-    var FallbackBackend = require('./libs/readability-backend/cli.js');
-    backendInstance.setFallback(new FallbackBackend());
-    break;
-
-  case 'unfluff':
-    BackendProvider = require('./libs/readability-backend/unfluff.js');
-    backendInstance = new BackendProvider();
-}
+var backendInstance = readabilityBackend.get(nconf);
 
 rssHandler.setReadabilityBackend(backendInstance);
 logger.info('[backend] %s', backendInstance.getName());
