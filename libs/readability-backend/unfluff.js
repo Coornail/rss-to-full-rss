@@ -26,7 +26,6 @@ ReadabilityUnfluffBackend.prototype.getName = function() {
  */
 ReadabilityUnfluffBackend.prototype.fetch = function(item, cb) {
   var url = item.link;
-  var that = this;
 
   var handleResponse = function (error, response, body) {
     if (!error && response.statusCode === 200) {

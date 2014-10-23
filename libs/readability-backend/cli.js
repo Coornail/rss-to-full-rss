@@ -45,7 +45,7 @@ ReadabilityCliBackend.prototype.fetch = function(item, cb) {
   readabilityCli.on('close', function (code, signal) {
     if(code === 0) {
       item.description = result;
-      cb(null, item)
+      cb(null, item);
     } else {
       cb('Child process error code:' + code);
     }
