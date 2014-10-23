@@ -1,0 +1,16 @@
+{
+  "cacheProvider": "none",
+  "memcached": [
+    {
+      "host": "127.0.0.1",
+      "port": 11211
+    }
+  ],
+  "port": 8000,
+  "backend": "cli",
+  "readability.com": {
+    "token": ""
+  },
+  "help": false,
+  "verbose": false
+}
