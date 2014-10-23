@@ -24,6 +24,14 @@ ReadabilityCliBackend.prototype.getName = function() {
   return 'Command-line backend (max subprocesses: '+ this.parallelLimit +')';
 };
 
+ReadabilityCliBackend.prototype.getDescription = function() {
+  var description = 'Spawns command line programs of node-readability.\n';
+  description += 'The separate process ensures that no memory leaks from the module.\n';
+  description += 'Exports html.';
+
+  return description;
+};
+
 /**
  * Callback to get the full description for an rss item.
  *

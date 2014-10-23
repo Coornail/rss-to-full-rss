@@ -6,6 +6,13 @@ var request = require('request');
 function ReadabilityUnfluffBackend() {
 }
 
+ReadabilityUnfluffBackend.prototype.getDescription = function() {
+  var description = 'Uses node-unfluff to get the content.\n';
+  description += 'Exports clear-text.';
+
+  return description;
+};
+
 /**
  * Get the readable name of the backend.
  *

@@ -7,6 +7,15 @@ function ReadabilityComBackend(token) {
   this.fallback = null;
 }
 
+ReadabilityComBackend.prototype.getDescription = function() {
+  var description = 'Uses readability.com as a backend.\n';
+  description += 'This backend is less processor intensive.\n';
+  description += 'Readability.com token must be set up beforehand.\n';
+  description += 'Exports html.';
+
+  return description;
+};
+
 /**
  * Get the readable name of the backend.
  *

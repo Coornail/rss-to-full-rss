@@ -19,7 +19,14 @@ nconf.argv()
 
 // Show help message if --help passed.
 if (nconf.get('help') !== false) {
-  require('./libs/help').getHelp(defaultConfig);
+  var help = require('./libs/help');
+
+  if (nconf.get('help') === 'backend') {
+    help.getBackendHelp();
+  } else {
+    help.getHelp(defaultConfig);
+  }
+
   process.exit(0);
 }
 
