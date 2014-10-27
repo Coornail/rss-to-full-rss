@@ -34,7 +34,7 @@ readabilityBackend.get = function(config) {
 
       // Command line backend if readability.com is unavailable or if we
       // exhausted their api limit.
-      var FallbackBackend = require('/cli.js');
+      var FallbackBackend = require('./cli.js');
       backendInstance.setFallback(new FallbackBackend());
       break;
 
