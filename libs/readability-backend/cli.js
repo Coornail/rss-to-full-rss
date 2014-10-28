@@ -7,7 +7,7 @@
  */
 
 var spawn = require('child_process').spawn;
-var appRoot = require('app-root-path');
+var path = require('path');
 
 function ReadabilityCliBackend() {
   // Limit number of cli executors to 2x of the number of CPUs we have.
@@ -45,8 +45,9 @@ ReadabilityCliBackend.prototype.getDescription = function() {
 ReadabilityCliBackend.prototype.fetch = function(item, cb) {
   var result = '';
 
+  var appDir = path.dirname(require.main.filename);
   // @todo Use .fork() and message passing instead.
-  var readabilityCli = spawn('node', [appRoot + '/readability-cli.js', item.link]);
+  var readabilityCli = spawn('node', [appDir+ '/readability-cli.js', item.link]);
 
   readabilityCli.stdout.on('data', function (data) {
     result += data;
