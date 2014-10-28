@@ -45,7 +45,8 @@ ReadabilityCliBackend.prototype.getDescription = function() {
 ReadabilityCliBackend.prototype.fetch = function(item, cb) {
   var result = '';
 
-  var readabilityCli = spawn(appRoot + '/readability-cli.js', [item.link]);
+  // @todo Use .fork() and message passing instead.
+  var readabilityCli = spawn('node', [appRoot + '/readability-cli.js', item.link]);
 
   readabilityCli.stdout.on('data', function (data) {
     result += data;
@@ -58,6 +59,10 @@ ReadabilityCliBackend.prototype.fetch = function(item, cb) {
     } else {
       cb('Child process error code:' + code);
     }
+  });
+
+  readabilityCli.on('error', function(err) {
+    cb(err);
   });
 };
 
