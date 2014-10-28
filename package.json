@@ -1,5 +1,5 @@
 {
-  "name": "rss_fulltext",
+  "name": "rss-fulltext",
   "version": "1.0.0",
   "description": "Rss to Full Rss proxy.",
   "repository": {
