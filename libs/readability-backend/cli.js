@@ -7,6 +7,7 @@
  */
 
 var spawn = require('child_process').spawn;
+var appRoot = require('app-root-path');
 
 function ReadabilityCliBackend() {
   // Limit number of cli executors to 2x of the number of CPUs we have.
@@ -44,7 +45,7 @@ ReadabilityCliBackend.prototype.getDescription = function() {
 ReadabilityCliBackend.prototype.fetch = function(item, cb) {
   var result = '';
 
-  var readabilityCli = spawn('./readability-cli.js', [item.link]);
+  var readabilityCli = spawn(appRoot + '/readability-cli.js', [item.link]);
 
   readabilityCli.stdout.on('data', function (data) {
     result += data;
