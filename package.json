@@ -1,6 +1,6 @@
 {
   "name": "rss-fulltext",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Rss to Full Rss proxy.",
   "repository": {
     "type": "git",
