@@ -6,6 +6,7 @@ var RSS = require('rss');
 var async = require('async');
 var _ = require('lodash');
 var validator = require('validator');
+var prettyMs = require('pretty-ms');
 
 /**
  * Class for the RssToFullRss converter.
@@ -56,6 +57,7 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
   }
 
   this.cache.get(k, function(err, data) {
+    var time;
     if (err || data === undefined) {
       that.logger.debug('[cache] Miss for %s', k);
 
@@ -64,7 +66,8 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
           that.logger.warn('[article-fetch] Error fetching full content for %s: %s', k, err);
           cb(err);
         } else {
-          that.logger.info('[article-fetch] Fetched and processed article %s in %s ms', k, (new Date() - fetchStart));
+          time = prettyMs(new Date() - fetchStart);
+          that.logger.info('[article-fetch] Fetched and processed article %s in %s', k, time);
           that.cache.set(k, data, 100000, function() {});
           cb(null, data);
         }
@@ -73,7 +76,8 @@ RssToFullRss.prototype.getFullDescription = function(item, cb) {
       return;
     }
 
-    that.logger.debug('[cache] Hit for %s in %s ms', k, (new Date() - fetchStart));
+    time = prettyMs(new Date() - fetchStart);
+    that.logger.debug('[cache] Hit for %s in %s', k, time);
     cb(null, data);
   });
 };

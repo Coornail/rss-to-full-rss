@@ -4,10 +4,13 @@
 
 var http = require('http');
 var url = require('url');
-var RssToFullRss = require('./libs/rss-to-fullrss');
+
 var winston = require('winston');
 var nconf = require('nconf');
 var _ = require('lodash');
+var prettyMs = require('pretty-ms');
+
+var RssToFullRss = require('./libs/rss-to-fullrss');
 var readabilityBackend = require('./libs/readability-backend/factory.js');
 
 // Command line arguments.
@@ -87,7 +90,8 @@ var processRequest = function(req, res) {
     }
 
     res.end(data);
-    logger.info('[http] Served Full RSS for %s in %s ms', query.url, (new Date() - requestStart));
+    var time = prettyMs(new Date() - requestStart);
+    logger.info('[http] Served Full RSS for %s in %s', query.url, time);
   });
 };
 
