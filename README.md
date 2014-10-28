@@ -9,7 +9,7 @@ This program fetches and parses the articles using the <a href="https://code.goo
 Usage
 -----
 ```sh
-npm install git@github.com:Coornail/rss-to-full-rss.git 
+npm install rss-fulltext
 node_modules/.bin/rss-to-full-rss
 ```
 

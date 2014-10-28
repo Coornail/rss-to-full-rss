@@ -8,9 +8,7 @@ RUN apt-get update &&\
   apt-get clean &&\
   apt-get autoclean
 
-RUN git clone https://github.com/Coornail/rss-to-full-rss.git
-RUN mv ./rss-to-full-rss/* .
-RUN npm install
+RUN npm install rss-fulltext
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ENTRYPOINT ["/usr/bin/supervisord"]
