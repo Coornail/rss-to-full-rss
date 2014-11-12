@@ -1,6 +1,6 @@
 {
   "name": "rss-fulltext",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Rss to Full Rss proxy.",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "lodash": "^2.4.1",
     "memcached": "^2.0.0",
     "nconf": "^0.6.9",
-    "node-readability": "^0.9.0",
+    "node-readability": "^0.10.0",
     "node-rss": "^1.0.1",
     "pretty-ms": "^1.0.0",
     "request": "^2.45.0",
