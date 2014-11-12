@@ -146,6 +146,9 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
       }
 
       items.forEach(function (item) {
+        // Fix disagreement between node-rss and feedparser about which
+        // property stores the article url.
+        item.url = item.link;
         responseFeed.item(item);
       });
       callback(null, responseFeed.xml());
