@@ -35,11 +35,13 @@ ReadabilityInAppBackend.prototype.getName = function() {
 ReadabilityInAppBackend.prototype.fetch = function(item, cb) {
   readability(item.link, {gzip: true}, function(err, article, meta) {
     if (err) {
+      article.close();
       cb(err);
       return;
     }
 
     item.description = article.content;
+    article.close();
     cb(null, item);
   });
 };
