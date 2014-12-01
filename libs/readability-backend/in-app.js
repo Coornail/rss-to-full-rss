@@ -7,8 +7,6 @@ function ReadabilityInAppBackend() {
 
 ReadabilityInAppBackend.prototype.getDescription = function() {
   var description = 'In-app managed instances of node-readability.';
-  description = 'This backend has sever memory-leak issues.\n';
-  description += 'See https://github.com/luin/node-readability/issues/38\n';
   description += 'Exports html.';
 
   return description;
