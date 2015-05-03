@@ -21,23 +21,23 @@
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
-    "chalk": "^0.5.1",
-    "feedparser": "^0.19.2",
-    "lodash": "^2.4.1",
-    "memcached": "^2.0.0",
-    "nconf": "^0.6.9",
-    "node-readability": "^1.0.0",
-    "node-rss": "^1.0.1",
-    "pretty-ms": "^1.0.0",
-    "request": "^2.45.0",
-    "rss": "^1.0.0",
+    "chalk": "^1.0.0",
+    "feedparser": "^1.0.1",
+    "lodash": "^3.8.0",
+    "memcached": "^2.1.0",
+    "nconf": "^0.7.1",
+    "node-readability": "^1.0.1",
+    "node-rss": "^1.0.3",
+    "pretty-ms": "^1.1.0",
+    "request": "^2.55.0",
+    "rss": "^1.1.1",
     "unfluff": "^0.10.0",
-    "validator": "^3.22.0",
-    "winston": "^0.8.1"
+    "validator": "^3.39.0",
+    "winston": "^1.0.0"
   },
   "devDependencies": {
-    "gulp": "^3.8.8",
-    "gulp-jshint": "^1.8.5",
-    "jshint-stylish": "^1.0.0"
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "jshint-stylish": "^1.0.1"
   }
 }
