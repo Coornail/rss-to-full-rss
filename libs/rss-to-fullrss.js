@@ -146,10 +146,17 @@ RssToFullRss.prototype.getFeedProcessor = function(callback) {
       }
 
       items.forEach(function (item) {
-        // Fix disagreement between node-rss and feedparser about which
-        // property stores the article url.
-        item.url = item.link;
-        responseFeed.item(item);
+        if(item != null) {
+          // Fix disagreement between node-rss and feedparser about which
+          // property stores the article url.
+          item.url = item.link;
+
+          // set comments element in node-rss if it exists on the original
+          if(item.comments != null) {
+            item.custom_elements = [{'comments': item.comments}];
+          }
+          responseFeed.item(item);
+        }
       });
       callback(null, responseFeed.xml());
     };
