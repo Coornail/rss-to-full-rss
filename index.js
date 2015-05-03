@@ -60,6 +60,10 @@ if (nconf.get('cacheProvider') === 'memcache' || nconf.get('cacheProvider') === 
 }
 
 var backendInstance = readabilityBackend.get(nconf);
+if (backendInstance === undefined) {
+  logger.error("[backend] Backend not found: " + nconf.get("backend"));
+  process.exit(1);
+}
 
 rssHandler.setReadabilityBackend(backendInstance);
 logger.info('[backend] %s', backendInstance.getName());
